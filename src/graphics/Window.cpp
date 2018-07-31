@@ -37,6 +37,7 @@ namespace GameEngine
             {
                 return failed("GameEngine failed to initialise");
             }
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
             this->_win = glfwCreateWindow(this->_width, this->_height,this->_title, NULL, NULL);
             if (!this->_win)
             {
