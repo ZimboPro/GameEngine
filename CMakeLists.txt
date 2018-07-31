@@ -35,10 +35,9 @@ if(NOT glad_POPULATED)
   FetchContent_Populate(glad)
 endif()
 
-include_directories(${glad_SOURCE_DIR}/include)
+include_directories(${glad_SOURCE_DIR}/include include/)
 
-
-add_executable(
+add_library(
     ${NAME}
     src/graphics/Window.cpp
 )

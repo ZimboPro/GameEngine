@@ -28,7 +28,6 @@ namespace GameEngine
                 unsigned int _width;
                 unsigned int _height;
                 GLFWwindow * _win;
-                bool _closed;
 
                 bool Init();
 

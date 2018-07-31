@@ -1,4 +1,4 @@
-#include "Window.hpp"
+#include <graphics/Window.hpp>
 #include <iostream>
 
 namespace GameEngine
@@ -85,7 +85,7 @@ namespace GameEngine
             int h;
             int w;
             glfwGetFramebufferSize(this->_win, &w, &h);
-            if (this->_width != w && this->_height != h)
+            if (this->_width != static_cast<unsigned int>(w) && this->_height != static_cast<unsigned int>(h))
             {
                 this->_width = w;
                 this->_height = h;
