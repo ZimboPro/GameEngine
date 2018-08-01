@@ -8,6 +8,9 @@ namespace GameEngine
 {
     namespace graphics
     {
+        #define MAX_KEYS 1024
+        #define MAX_BUTTONS 32 
+
         class Window
         {
             public:
@@ -22,12 +25,24 @@ namespace GameEngine
                 unsigned int Height() const;
 
                 bool hasResized();
-                
+
+                static bool isKeyPressed(int keycode);
+                static bool isButtonPressed(int button);
+ 
             private:
                 const char * _title;
                 unsigned int _width;
                 unsigned int _height;
                 GLFWwindow * _win;
+
+                static bool _keys[MAX_KEYS];
+                static bool _buttons[MAX_BUTTONS];
+                static double _mouseX;
+                static double _mouseY;
+
+                friend static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+                friend static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+                friend static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
                 bool Init();
 

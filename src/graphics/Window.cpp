@@ -5,12 +5,19 @@ namespace GameEngine
 {
     namespace graphics
     {
+        //void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
         Window::Window(const char *title, unsigned int w, unsigned int h) : _title(title)
         {
             this->_height = h;
             this->_width = w;
             if (!Init())
                 glfwTerminate();
+            
+            for (int i = 0; i < MAX_KEYS; i++)
+                this->_keys[i] = false;
+            for (int i = 0; i < MAX_BUTTONS; i++)
+                this->_buttons[i] = false;
         }
 
         Window::~Window()
@@ -21,7 +28,6 @@ namespace GameEngine
         void Window::update()
         {
             glfwSwapBuffers(this->_win);
-            
             glfwPollEvents();
         }
 
@@ -31,23 +37,39 @@ namespace GameEngine
             return false;
         }
 
+        bool Window::isKeyPressed(int keycode)
+        {
+            if (keycode >= MAX_KEYS)
+                return false;
+            return _keys[keycode];
+        }
+
+        bool Window::isButtonPressed(int button)
+        {
+            if (button >= MAX_BUTTONS)
+                return false;
+            return _buttons[button];
+        }
+
         bool Window::Init()
         {
             if (!glfwInit())
-            {
                 return failed("GameEngine failed to initialise");
-            }
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
             this->_win = glfwCreateWindow(this->_width, this->_height,this->_title, NULL, NULL);
             if (!this->_win)
-            {
                 return failed("Failed to create window");
-            }
-            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-            {
-                return failed("Failed to initialize GLAD");
-            } 
             glfwMakeContextCurrent(this->_win);
+
+            glfwSetKeyCallback(this->_win, key_callback);
+            glfwSetCursorPosCallback(this->_win, cursor_position_callback);
+            glfwSetMouseButtonCallback(this->_win, mouse_button_callback);
+
+            glfwSetWindowUserPointer(this->_win, this);
+
+            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+                return failed("Failed to initialize GLAD");
             return true;
         }
 
@@ -94,6 +116,22 @@ namespace GameEngine
                 return true;
             }
             return false;
+        }
+
+        void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+            win->_keys[key] = action != GLFW_RELEASE; 
+        }
+        
+        void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+        {
+
+        }
+
+        void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+        {
+
         }
     } // namespace graphics
 } // namespace GameEngine

@@ -6,7 +6,7 @@ set(NAME GameEngine)
 
 set(CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra")
+#set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 include(FetchContent)
 
