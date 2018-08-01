@@ -6,7 +6,7 @@ set(NAME GameEngine)
 
 set(CXX_STANDARD 17)
 
-#set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 include(FetchContent)
 
@@ -35,7 +35,8 @@ if(NOT glad_POPULATED)
   FetchContent_Populate(glad)
 endif()
 
-include_directories(${glad_SOURCE_DIR}/include include/)
+include_directories(${glad_SOURCE_DIR}/include)
+include_directories(include)
 
 add_library(
     ${NAME}

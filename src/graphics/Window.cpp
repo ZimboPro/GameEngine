@@ -5,7 +5,24 @@ namespace GameEngine
 {
     namespace graphics
     {
-        //void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+            win->_keys[key] = action != GLFW_RELEASE; 
+        }
+        
+        void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+        {
+            Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+            win->_mouseX = xpos;
+            win->_mouseY = ypos;
+        }
+
+        void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+        {
+            Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+            win->_buttons[button] = action != GLFW_RELEASE;
+        }
 
         Window::Window(const char *title, unsigned int w, unsigned int h) : _title(title)
         {
@@ -37,18 +54,24 @@ namespace GameEngine
             return false;
         }
 
-        bool Window::isKeyPressed(int keycode)
+        bool Window::isKeyPressed(int keycode) const
         {
             if (keycode >= MAX_KEYS)
                 return false;
             return _keys[keycode];
         }
 
-        bool Window::isButtonPressed(int button)
+        bool Window::isButtonPressed(int button) const
         {
             if (button >= MAX_BUTTONS)
                 return false;
             return _buttons[button];
+        }
+
+        void Window::CursorPostion(double &x, double & y) const
+        {
+            x = _mouseX;
+            y = _mouseY;
         }
 
         bool Window::Init()
@@ -108,7 +131,8 @@ namespace GameEngine
             int h;
             int w;
             glfwGetFramebufferSize(this->_win, &w, &h);
-            if (this->_width != static_cast<unsigned int>(w) && this->_height != static_cast<unsigned int>(h))
+            if (this->_width != static_cast<unsigned int>(w) &&
+                    this->_height != static_cast<unsigned int>(h))
             {
                 this->_width = w;
                 this->_height = h;
@@ -118,20 +142,6 @@ namespace GameEngine
             return false;
         }
 
-        void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-        {
-            Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
-            win->_keys[key] = action != GLFW_RELEASE; 
-        }
         
-        void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-        {
-
-        }
-
-        void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-        {
-
-        }
     } // namespace graphics
 } // namespace GameEngine

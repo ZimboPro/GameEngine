@@ -26,8 +26,9 @@ namespace GameEngine
 
                 bool hasResized();
 
-                static bool isKeyPressed(int keycode);
-                static bool isButtonPressed(int button);
+                bool isKeyPressed(int keycode) const;
+                bool isButtonPressed(int button) const;
+                void CursorPostion(double &x, double & y) const;
  
             private:
                 const char * _title;
@@ -40,12 +41,11 @@ namespace GameEngine
                 static double _mouseX;
                 static double _mouseY;
 
-                friend static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-                friend static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
-                friend static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+                friend void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+                friend void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+                friend void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
                 bool Init();
-
         };
     }
 }
