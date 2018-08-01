@@ -36,6 +36,21 @@ if(NOT glad_POPULATED)
 endif()
 
 include_directories(${glad_SOURCE_DIR}/include)
+
+FetchContent_Declare(
+    glm
+    URL https://github.com/g-truc/glm/archive/0.9.9.0.zip
+)
+
+FetchContent_GetProperties(glm)
+
+if(NOT glm_POPULATED)
+    FetchContent_Populate(glm)
+    add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+endif()
+
+include_directories(${glm_SOURCE_DIR})
+
 include_directories(include)
 
 add_library(
