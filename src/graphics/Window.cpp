@@ -23,6 +23,7 @@ namespace GameEngine
             Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
             win->_buttons[button] = action != GLFW_RELEASE;
         }
+        
 
         Window::Window(const char *title, unsigned int w, unsigned int h) : _title(title)
         {
@@ -140,8 +141,6 @@ namespace GameEngine
                 return true;
             }
             return false;
-        }
-
-        
+        } 
     } // namespace graphics
 } // namespace GameEngine

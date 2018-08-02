@@ -56,9 +56,8 @@ include_directories(include)
 add_library(
     ${NAME}
     src/graphics/Window.cpp
-    src/maths/Vec2.cpp
-    src/maths/Vec3.cpp
-    src/maths/Vec4.cpp
+    src/graphics/Shader.cpp
+    src/utils/FileUtils.cpp
 )
 
 
