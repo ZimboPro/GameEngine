@@ -1,4 +1,6 @@
 #include <graphics/buffers/VertexArray.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace GameEngine
 {
@@ -11,7 +13,7 @@ namespace GameEngine
 
         VertexArray::~VertexArray()
         {
-            for (int i = 0; i < this->_buffer.size(); i++)
+            for (size_t i = 0; i < this->_buffer.size(); i++)
             {
                 delete this->_buffer[i];
             }
@@ -23,7 +25,7 @@ namespace GameEngine
             bind();
 
             buffer->bind();
-            glEnableVertexArrayAttrib(index);
+            glEnableVertexArrayAttrib(this->_arrayID ,index);
             glVertexAttribPointer(index, buffer->ComponentCount(),GL_FLOAT, GL_FALSE, 0, 0);
 
             this->_buffer.push_back(buffer);

@@ -4,7 +4,7 @@ namespace GameEngine
 {
     namespace graphics
     {
-        InderBuffer::InderBuffer(GLushort * data, GLsizei count)
+        IndexBuffer::IndexBuffer(GLushort * data, GLsizei count)
         {
             this->_count = count;
 
@@ -14,17 +14,17 @@ namespace GameEngine
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
 
-        void InderBuffer::bind() const
+        void IndexBuffer::bind() const
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_bufferID);
         }
 
-        void InderBuffer::unbind() const
+        void IndexBuffer::unbind() const
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER , 0);
         }
 
-        inline GLuint InderBuffer::Count() const
+        inline GLuint IndexBuffer::Count() const
         {
             return this->_count;
         }

@@ -83,6 +83,11 @@ namespace GameEngine
             return glGetUniformLocation(this->_shader, name);
         }
 
+        GLint Shader::UniformLocation(const GLchar * name) const
+        {
+            return glGetUniformLocation(this->_shader, name);
+        }
+
         void Shader::setUniform1f(const GLchar * name, float value)
         {
             glUniform1f(UniformLocation(name), value);
@@ -109,6 +114,37 @@ namespace GameEngine
         }
 
         void Shader::setUniformMat4f(const GLchar * name, glm::mat4 value)
+        { 
+            const GLfloat * temp = glm::value_ptr<glm::mat4>(value); 
+            glUniformMatrix4fv(UniformLocation(name), 1, GL_FALSE, temp);
+        }
+
+         void Shader::setUniform1f(const GLchar * name, float value) const
+        {
+            glUniform1f(UniformLocation(name), value);
+        }
+
+        void Shader::setUniform1i(const GLchar * name, int value) const
+        {
+            glUniform1i(UniformLocation(name), value);
+        }
+
+        void Shader::setUniform2f(const GLchar * name, glm::vec2 value) const
+        {
+            glUniform2f(UniformLocation(name), value.x, value.y);
+        }
+
+        void Shader::setUniform3f(const GLchar * name, glm::vec3 value) const
+        {
+            glUniform3f(UniformLocation(name), value.x, value.y, value.z);
+        }
+
+        void Shader::setUniform4f(const GLchar * name, glm::vec4 value) const
+        {
+            glUniform4f(UniformLocation(name), value.x, value.y, value.z, value.w);
+        }
+
+        void Shader::setUniformMat4f(const GLchar * name, glm::mat4 value) const
         { 
             const GLfloat * temp = glm::value_ptr<glm::mat4>(value); 
             glUniformMatrix4fv(UniformLocation(name), 1, GL_FALSE, temp);

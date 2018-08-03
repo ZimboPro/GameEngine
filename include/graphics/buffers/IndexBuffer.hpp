@@ -7,10 +7,10 @@ namespace GameEngine
 {
     namespace graphics
     {
-        class InderBuffer
+        class IndexBuffer
         {
             public:
-                InderBuffer(GLushort * data, GLsizei count);
+                IndexBuffer(GLushort * data, GLsizei count);
                 void bind() const;
                 void unbind() const;
 
