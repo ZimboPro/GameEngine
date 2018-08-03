@@ -45,6 +45,11 @@ namespace GameEngine
 
         void Window::update()
         {
+            GLenum error = glGetError();
+
+            if (error != GL_NO_ERROR)
+                std::cout << "OpenGL error: " << error << std::endl;
+
             glfwSwapBuffers(this->_win);
             glfwPollEvents();
         }
