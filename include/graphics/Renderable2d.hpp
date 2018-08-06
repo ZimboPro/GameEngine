@@ -11,28 +11,27 @@ namespace GameEngine
 {
     namespace graphics
     {
+        struct VertexData
+        {
+            glm::vec3 vertex;
+            glm::vec4 color;
+        };
+
         class Renderable2d
         {
             public:
                 const glm::vec2 getSize() const;
                 const glm::vec3 Position() const;
                 const glm::vec4 Color() const;
-                const Shader & getShader() const;
-
-                const VertexArray* getVAO() const;
-                const IndexBuffer* getIBO() const;
 
             protected:
-                Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color, Shader &shader);
+                Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color);
                 virtual  ~Renderable2d();
                 glm::vec2 _size;
                 glm::vec3 _position; 
                 glm::vec4 _color;
 
-                Shader _shader;
-
-                VertexArray* _vertexArray;
-                IndexBuffer* _indexBuffer;      
+                    
         };
     }
 }

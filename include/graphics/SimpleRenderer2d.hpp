@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <Maths.hpp>
 #include <graphics/Renderer2d.hpp>
+#include <graphics/StaticSprite.hpp>
 #include <deque>
 
 namespace GameEngine
@@ -17,7 +18,7 @@ namespace GameEngine
                 virtual void flush();
                 virtual ~SimpleRenderer2d();
             private:
-                std::deque<const Renderable2d *> _renderQueue;
+                std::deque<const StaticSprite *> _renderQueue;
         };
     }
 }

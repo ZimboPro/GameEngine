@@ -1,0 +1,105 @@
+#include <graphics/Batch2dRenderer.hpp>
+
+namespace GameEngine
+{
+    namespace graphics
+    {
+        Batch2dRenderer::Batch2dRenderer()
+        {
+            Init();
+        }
+
+        Batch2dRenderer::~Batch2dRenderer()
+        {
+            delete this->_ibo;
+            glDeleteBuffers(1, &this->_vbo);
+        }
+
+        void Batch2dRenderer::Init()
+        {
+            glGenVertexArrays(1, &this->_vao);
+
+            glBindVertexArray(this->_vao);
+
+            glGenBuffers(1, &this->_vbo);
+            glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
+            glBufferData(GL_ARRAY_BUFFER, RENDER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
+            
+            glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+            glEnableVertexAttribArray(SHADER_COLOR_INDEX);
+            
+            glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, static_cast<const GLvoid *>(0));
+            glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(3 * sizeof(GLfloat )));
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+            GLushort indices[RENDER_INDICES_SIZE];
+
+            int offset = 0;
+            for (int i = 0; i < RENDER_INDICES_SIZE; i += 6)
+            {
+                indices[i] = offset + 0;
+                indices[i + 1] = offset + 1;
+                indices[i + 2] = offset + 2;
+
+                indices[i + 3] = offset + 2;
+                indices[i + 4] = offset + 3;
+                indices[i + 5] = offset + 0;
+
+                offset += 4;
+            }
+
+            this->_ibo = new IndexBuffer(indices, RENDER_INDICES_SIZE);
+            glBindVertexArray(0);
+        }
+
+        void Batch2dRenderer::begin()
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
+            this->_buffer =  reinterpret_cast<VertexData *>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+        }
+
+        void Batch2dRenderer::submit(const Renderable2d * renderable)
+        {
+            const glm::vec3 positon = renderable->Position();
+            const glm::vec2 size = renderable->getSize();
+            const glm::vec4 color = renderable->Color();
+
+            this->_buffer->vertex = positon;
+            this->_buffer->color = color;
+            this->_buffer++;
+
+            this->_buffer->vertex = glm::vec3(positon.x, positon.y + size.y, positon.z);
+            this->_buffer->color = color;
+            this->_buffer++;
+
+            this->_buffer->vertex = glm::vec3(positon.x + size.x, positon.y + size.y, positon.z);
+            this->_buffer->color = color;
+            this->_buffer++;
+
+            this->_buffer->vertex = glm::vec3(positon.x + size.x, positon.y, positon.z);
+            this->_buffer->color = color;
+            this->_buffer++;
+
+            this->_count += 6;
+        }
+
+        void Batch2dRenderer::end()
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glUnmapBuffer(GL_ARRAY_BUFFER);
+        }
+
+        void Batch2dRenderer::flush()
+        {
+            glBindVertexArray(this->_vao);
+            this->_ibo->bind();
+
+            glDrawElements(GL_TRIANGLES, this->_count, GL_UNSIGNED_SHORT, NULL);
+
+            this->_ibo->unbind();
+            glBindVertexArray(0);
+
+            this->_count = 0;
+        }
+    }
+}

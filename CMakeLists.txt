@@ -59,10 +59,16 @@ add_library(
     src/graphics/Shader.cpp
     src/graphics/Renderable2d.cpp
     src/graphics/SimpleRenderer2d.cpp
+    src/graphics/Batch2dRenderer.cpp
+    src/graphics/StaticSprite.cpp
+    src/graphics/Sprite.cpp
+
     src/utils/FileUtils.cpp
+    
     src/graphics/buffers/Buffer.cpp
     src/graphics/buffers/IndexBuffer.cpp
     src/graphics/buffers/VertexArray.cpp
+    
     ${glad_SOURCE_DIR}/src/glad.c
 )
 

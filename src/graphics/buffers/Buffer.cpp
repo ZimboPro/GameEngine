@@ -14,6 +14,11 @@ namespace GameEngine
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
+        Buffer::~Buffer()
+        {
+            glDeleteBuffers(1, &this->_bufferID);
+        }
+
         void Buffer::bind() const
         {
             glBindBuffer(GL_ARRAY_BUFFER, this->_bufferID);

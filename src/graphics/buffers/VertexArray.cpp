@@ -17,7 +17,8 @@ namespace GameEngine
             {
                 delete this->_buffer[i];
             }
-            this->_buffer.clear(); 
+            this->_buffer.clear();
+            glDeleteVertexArrays(1, &this->_arrayID);
         }
 
         void VertexArray::addBuffer(Buffer * buffer, GLuint index)

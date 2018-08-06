@@ -9,17 +9,18 @@ namespace GameEngine
 
         void SimpleRenderer2d::submit(const Renderable2d * renderable)
         {
-            this->_renderQueue.push_back(renderable);
+            this->_renderQueue.push_back(static_cast<const StaticSprite *>(renderable));
         }
 
         void SimpleRenderer2d::flush()
         {
             while (!this->_renderQueue.empty())
             {
-                const Renderable2d * renderable = this->_renderQueue.front(); 
+                const StaticSprite * renderable = this->_renderQueue.front(); 
                 renderable->getVAO()->bind();
                 renderable->getIBO()->bind();
 
+                //check if matrix is correct
                 glm::vec4 temp(renderable->Position(), 0);
                 glm::mat4 t(0.0f);
                 t[3] = temp;
