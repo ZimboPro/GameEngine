@@ -95,6 +95,9 @@ namespace GameEngine
             glfwSetCursorPosCallback(this->_win, cursor_position_callback);
             glfwSetMouseButtonCallback(this->_win, mouse_button_callback);
 
+            //doesn't cap fps
+            glfwSwapInterval(0.0);
+
             glfwSetWindowUserPointer(this->_win, this);
 
             if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

@@ -1,6 +1,7 @@
 #ifndef BATCH2DRENDERER_HPP
 # define BATCH2DRENDERER_HPP
 
+#include <cstddef>
 #include <graphics/Renderer2d.hpp>
 #include <graphics/buffers/IndexBuffer.hpp>
 

@@ -1,11 +1,7 @@
 #ifndef TIMES_HPP
 #define TIMES_HPP
 
-#include <sys/_types/_timespec.h>
-#include <Kernel/sys/_types/_timespec.h>
-#include <Kernel/sys/_types/_user32_timespec.h>
-#include <Kernel/sys/_types/_user64_timespec.h>
-#include <Kernel/sys/_types/_user_timespec.h>
+#include <sys/time.h>
 
 namespace GameEngine
 {
@@ -15,10 +11,12 @@ namespace GameEngine
             Timer();
             ~Timer();
             void reset();
-            float elapsed();
+            double elapsed();
+            double elapsed_ms();
+            double elapsed_us();
 
         private:
-            struct timespec _start;
+            timeval _start;
             double _freq;
 
     };

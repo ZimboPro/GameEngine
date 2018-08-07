@@ -14,7 +14,8 @@ namespace GameEngine
         struct VertexData
         {
             glm::vec3 vertex;
-            glm::vec4 color;
+            //glm::vec4 color;
+            uint32_t color;
         };
 
         class Renderable2d

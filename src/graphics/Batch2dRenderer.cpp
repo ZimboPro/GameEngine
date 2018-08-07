@@ -29,7 +29,8 @@ namespace GameEngine
             glEnableVertexAttribArray(SHADER_COLOR_INDEX);
             
             glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, static_cast<const GLvoid *>(0));
-            glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(3 * sizeof(GLfloat )));
+            //glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, VertexData::color)));
+            glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, color)));
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             GLushort indices[RENDER_INDICES_SIZE];
@@ -64,20 +65,27 @@ namespace GameEngine
             const glm::vec2 size = renderable->getSize();
             const glm::vec4 color = renderable->Color();
 
+            int r = color.x * 255.0f;
+            int g = color.y * 255.0f;
+            int b = color.z * 255.0f;
+            int a = color.w * 255.0f;
+
+            uint32_t c = a << 24 | b << 16 | g << 8 | r;
+
             this->_buffer->vertex = positon;
-            this->_buffer->color = color;
+            this->_buffer->color = c;
             this->_buffer++;
 
             this->_buffer->vertex = glm::vec3(positon.x, positon.y + size.y, positon.z);
-            this->_buffer->color = color;
+            this->_buffer->color = c;
             this->_buffer++;
 
             this->_buffer->vertex = glm::vec3(positon.x + size.x, positon.y + size.y, positon.z);
-            this->_buffer->color = color;
+            this->_buffer->color = c;
             this->_buffer++;
 
             this->_buffer->vertex = glm::vec3(positon.x + size.x, positon.y, positon.z);
-            this->_buffer->color = color;
+            this->_buffer->color = c;
             this->_buffer++;
 
             this->_count += 6;

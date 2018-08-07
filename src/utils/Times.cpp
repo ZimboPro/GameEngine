@@ -5,20 +5,35 @@ namespace GameEngine
 {
     Timer::Timer()
     {
-        clock_gettime(CLOCK_REALTIME, &this->_start);
-        this->_freq = this->_start.tv_sec + this->_start.tv_nsec / 1000000000.0;
+        gettimeofday(&this->_start, NULL);
     }
 
     void Timer::reset()
     {
-        clock_gettime(CLOCK_REALTIME, &this->_start);
+        gettimeofday(&this->_start, NULL);
     }
 
-    float Timer::elapsed()
+    double Timer::elapsed()
     {
-        struct timespec current;
-        clock_gettime(CLOCK_REALTIME, &current);
+        timeval current;
+        gettimeofday(&current, NULL);
 
         return current.tv_sec - this->_start.tv_sec;
+    }
+
+    double Timer::elapsed_ms()
+    {
+        timeval current;
+        gettimeofday(&current, NULL);
+
+        return (current.tv_sec - this->_start.tv_sec) * 1000;
+    }
+
+    double Timer::elapsed_us()
+    {
+        timeval current;
+        gettimeofday(&current, NULL);
+
+        return current.tv_usec - this->_start.tv_usec;
     }
 }
