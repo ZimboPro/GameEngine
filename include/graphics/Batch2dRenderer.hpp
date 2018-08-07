@@ -25,8 +25,8 @@ namespace GameEngine
                 virtual ~Batch2dRenderer();
                 virtual void submit(const Renderable2d * renderable) ;
                 virtual void flush();
-                void begin();
-                void end();
+                virtual void begin();
+                virtual void end();
 
             private:
                 GLuint _vao;

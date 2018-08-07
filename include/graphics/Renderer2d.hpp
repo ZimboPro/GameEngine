@@ -11,6 +11,8 @@ namespace GameEngine
         {
             public:
                 virtual ~Renderer2d() {};
+                virtual void begin() = 0;
+                virtual void end() = 0;
                 virtual void submit(const Renderable2d * renderable) = 0;
                 virtual void flush() = 0; 
         };

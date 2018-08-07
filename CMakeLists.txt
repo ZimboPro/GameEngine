@@ -68,6 +68,9 @@ add_library(
     src/graphics/buffers/Buffer.cpp
     src/graphics/buffers/IndexBuffer.cpp
     src/graphics/buffers/VertexArray.cpp
+
+    src/graphics/layers/Layer.cpp
+    src/graphics/layers/TileLayer.cpp
     
     ${glad_SOURCE_DIR}/src/glad.c
 )

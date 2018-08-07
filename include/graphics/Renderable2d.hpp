@@ -24,10 +24,10 @@ namespace GameEngine
                 const glm::vec2 getSize() const;
                 const glm::vec3 Position() const;
                 const glm::vec4 Color() const;
+                virtual  ~Renderable2d();
 
             protected:
                 Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color);
-                virtual  ~Renderable2d();
                 glm::vec2 _size;
                 glm::vec3 _position; 
                 glm::vec4 _color;

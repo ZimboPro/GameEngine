@@ -33,5 +33,8 @@ namespace GameEngine
                 this->_renderQueue.pop_front();
             }
         }
+
+        void SimpleRenderer2d::begin(){}
+        void SimpleRenderer2d::end(){}
     }
 }

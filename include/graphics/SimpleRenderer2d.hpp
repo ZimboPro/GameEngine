@@ -16,6 +16,8 @@ namespace GameEngine
             public:
                 virtual void submit(const Renderable2d * renderable);
                 virtual void flush();
+                virtual void begin();
+                virtual void end();
                 virtual ~SimpleRenderer2d();
             private:
                 std::deque<const StaticSprite *> _renderQueue;
