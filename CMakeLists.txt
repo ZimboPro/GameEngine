@@ -29,6 +29,20 @@ endif()
 include_directories(${glfw_SOURCE_DIR}/include)
 
 FetchContent_Declare(
+    freeimage
+    GIT_REPOSITORY https://github.com/Kanma/FreeImage.git
+)
+
+FetchContent_GetProperties(freeimage)
+
+if(NOT freeimage_POPULATED)
+    FetchContent_Populate(freeimage)
+    add_subdirectory(${freeimage_SOURCE_DIR} ${freeimage_BINARY_DIR})
+endif()
+
+include_directories(${freeimage_SOURCE_DIR}/include)
+
+FetchContent_Declare(
     glad
     GIT_REPOSITORY https://github.com/Dav1dde/glad.git
     GIT_TAG origin/c
@@ -81,9 +95,10 @@ add_library(
     ${glad_SOURCE_DIR}/src/glad.c
 )
 
+target_link_libraries(${NAME} glfw)
+target_link_libraries(${NAME} freeimage)
 
 find_package(OpenGL REQUIRED)
-
 target_link_libraries(${NAME} ${OPENGL_gl_LIBRARY})
 
 if (OPENGL_GLU_FOUND)
