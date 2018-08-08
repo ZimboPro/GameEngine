@@ -1,6 +1,6 @@
 #include <graphics/Shader.hpp>
 #include <utils/FileUtils.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include <Maths.hpp>
 #include <iostream>
 
 namespace GameEngine

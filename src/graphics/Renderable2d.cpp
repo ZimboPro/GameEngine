@@ -4,6 +4,9 @@ namespace GameEngine
 {
     namespace graphics
     {
+        Renderable2d::Renderable2d()
+        {}
+
         Renderable2d::Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color)
         {
             this->_position = position;
@@ -27,6 +30,12 @@ namespace GameEngine
         inline const glm::vec4 Renderable2d::Color() const
         {
             return (this->_color);
+        }
+
+        inline void Renderable2d::submit(Renderer2d * renderer) const
+        {
+            const Renderable2d * render = this;
+            renderer->submit(render);
         }
     }
 }

@@ -5,6 +5,7 @@
 #include <graphics/buffers/IndexBuffer.hpp>
 #include <graphics/buffers/VertexArray.hpp>
 #include <graphics/Shader.hpp>
+#include <graphics/Renderer2d.hpp>
 #include <Maths.hpp>
 
 namespace GameEngine
@@ -26,7 +27,10 @@ namespace GameEngine
                 const glm::vec4 Color() const;
                 virtual  ~Renderable2d();
 
+                virtual void submit(Renderer2d * renderer) const;
+
             protected:
+                Renderable2d();
                 Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color);
                 glm::vec2 _size;
                 glm::vec3 _position; 

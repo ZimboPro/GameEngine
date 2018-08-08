@@ -72,19 +72,19 @@ namespace GameEngine
 
             uint32_t c = a << 24 | b << 16 | g << 8 | r;
 
-            this->_buffer->vertex = positon;
+            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon, 1.0f);
             this->_buffer->color = c;
             this->_buffer++;
 
-            this->_buffer->vertex = glm::vec3(positon.x, positon.y + size.y, positon.z);
+            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x, positon.y + size.y, positon.z, 1.0f);
             this->_buffer->color = c;
             this->_buffer++;
 
-            this->_buffer->vertex = glm::vec3(positon.x + size.x, positon.y + size.y, positon.z);
+            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y + size.y, positon.z, 1.0f);
             this->_buffer->color = c;
             this->_buffer++;
 
-            this->_buffer->vertex = glm::vec3(positon.x + size.x, positon.y, positon.z);
+            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y, positon.z, 1.0f);
             this->_buffer->color = c;
             this->_buffer++;
 

@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <Maths.hpp>
 #include <graphics/Renderer2d.hpp>
+#include <graphics/Renderable2d.hpp>
 #include <graphics/StaticSprite.hpp>
 #include <deque>
 

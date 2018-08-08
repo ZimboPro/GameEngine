@@ -6,7 +6,11 @@ set(NAME GameEngine)
 
 set(CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+if (APPLE)
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -stdlib=libc++")
+else()
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+endif()
 
 include(FetchContent)
 
@@ -46,7 +50,6 @@ FetchContent_GetProperties(glm)
 
 if(NOT glm_POPULATED)
     FetchContent_Populate(glm)
-    add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
 endif()
 
 include_directories(${glm_SOURCE_DIR})
@@ -58,12 +61,14 @@ add_library(
     src/graphics/Window.cpp
     src/graphics/Shader.cpp
     src/graphics/Renderable2d.cpp
+    src/graphics/Renderer2d.cpp
     src/graphics/SimpleRenderer2d.cpp
     src/graphics/Batch2dRenderer.cpp
     src/graphics/StaticSprite.cpp
     src/graphics/Sprite.cpp
 
     src/utils/FileUtils.cpp
+    src/utils/Times.cpp
     
     src/graphics/buffers/Buffer.cpp
     src/graphics/buffers/IndexBuffer.cpp
@@ -71,6 +76,7 @@ add_library(
 
     src/graphics/layers/Layer.cpp
     src/graphics/layers/TileLayer.cpp
+    src/graphics/layers/Group.cpp
     
     ${glad_SOURCE_DIR}/src/glad.c
 )

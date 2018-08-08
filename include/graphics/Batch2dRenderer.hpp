@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <graphics/Renderer2d.hpp>
+#include <graphics/Renderable2d.hpp>
 #include <graphics/buffers/IndexBuffer.hpp>
 
 #define RENDER_MAX_SPRITES 10000
