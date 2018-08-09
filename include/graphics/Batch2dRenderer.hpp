@@ -13,7 +13,8 @@
 #define RENDER_INDICES_SIZE RENDER_MAX_SPRITES * 6
 
 #define SHADER_VERTEX_INDEX 0
-#define SHADER_COLOR_INDEX 1
+#define SHADER_UV_INDEX 1
+#define SHADER_COLOR_INDEX 2
 
 namespace GameEngine
 {

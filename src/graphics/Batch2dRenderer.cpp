@@ -26,10 +26,12 @@ namespace GameEngine
             glBufferData(GL_ARRAY_BUFFER, RENDER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
             
             glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+            glEnableVertexAttribArray(SHADER_UV_INDEX);
             glEnableVertexAttribArray(SHADER_COLOR_INDEX);
             
             glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, static_cast<const GLvoid *>(0));
             //glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, VertexData::color)));
+            glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, uv)));
             glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, color)));
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -64,6 +66,7 @@ namespace GameEngine
             const glm::vec3 positon = renderable->Position();
             const glm::vec2 size = renderable->getSize();
             const glm::vec4 color = renderable->Color();
+            const std::vector<glm::vec2>& uv = renderable->UV();
 
             int r = color.x * 255.0f;
             int g = color.y * 255.0f;
@@ -74,17 +77,21 @@ namespace GameEngine
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon, 1.0f);
             this->_buffer->color = c;
+            this->_buffer->uv = uv[0];
             this->_buffer++;
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x, positon.y + size.y, positon.z, 1.0f);
             this->_buffer->color = c;
+            this->_buffer->uv = uv[1];
             this->_buffer++;
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y + size.y, positon.z, 1.0f);
+            this->_buffer->uv = uv[2];
             this->_buffer->color = c;
             this->_buffer++;
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y, positon.z, 1.0f);
+            this->_buffer->uv = uv[3];
             this->_buffer->color = c;
             this->_buffer++;
 

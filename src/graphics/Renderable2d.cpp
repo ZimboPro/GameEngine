@@ -5,13 +5,16 @@ namespace GameEngine
     namespace graphics
     {
         Renderable2d::Renderable2d()
-        {}
+        {
+            setUVDefaults();
+        }
 
         Renderable2d::Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color)
         {
             this->_position = position;
             this->_size = size;
-            this->_color = color;  
+            this->_color = color;
+            setUVDefaults();
         }
         
         Renderable2d::~Renderable2d()
@@ -36,6 +39,19 @@ namespace GameEngine
         {
             const Renderable2d * render = this;
             renderer->submit(render);
+        }
+
+        inline const std::vector<glm::vec2> & Renderable2d::UV() const
+        {
+            return (this->_UV);
+        }
+
+        void Renderable2d::setUVDefaults()
+        {
+            this->_UV.push_back(glm::vec2(0,0));
+            this->_UV.push_back(glm::vec2(0,1));
+            this->_UV.push_back(glm::vec2(1,1));
+            this->_UV.push_back(glm::vec2(1,0));
         }
     }
 }

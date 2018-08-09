@@ -15,7 +15,7 @@ namespace GameEngine
         struct VertexData
         {
             glm::vec3 vertex;
-            //glm::vec4 color;
+            glm::vec2 uv;
             uint32_t color;
         };
 
@@ -25,6 +25,7 @@ namespace GameEngine
                 const glm::vec2 getSize() const;
                 const glm::vec3 Position() const;
                 const glm::vec4 Color() const;
+                const std::vector<glm::vec2> & UV() const;
                 virtual  ~Renderable2d();
 
                 virtual void submit(Renderer2d * renderer) const;
@@ -35,7 +36,10 @@ namespace GameEngine
                 glm::vec2 _size;
                 glm::vec3 _position; 
                 glm::vec4 _color;
-
+                std::vector<glm::vec2> _UV;
+            
+            private:
+                void setUVDefaults();
                     
         };
     }
