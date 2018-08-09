@@ -98,6 +98,16 @@ namespace GameEngine
             glUniform1i(UniformLocation(name), value);
         }
 
+        void Shader::setUniform1fv(const GLchar * name, int count, float* value)
+        {
+            glUniform1fv(UniformLocation(name), count, value);
+        }
+
+        void Shader::setUniform1iv(const GLchar * name, int count, int* value)
+        {
+            glUniform1iv(UniformLocation(name), count, value);
+        }
+
         void Shader::setUniform2f(const GLchar * name, glm::vec2 value)
         {
             glUniform2f(UniformLocation(name), value.x, value.y);

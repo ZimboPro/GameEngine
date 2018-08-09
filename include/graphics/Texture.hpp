@@ -18,6 +18,7 @@ namespace GameEngine
                 void unbind() const;
                 const unsigned int Width() const;
                 const unsigned int Height() const;
+                const GLuint ID() const;
             private:
                 std::string _path;
                 GLuint _textureID;

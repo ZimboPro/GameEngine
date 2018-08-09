@@ -6,6 +6,7 @@
 #include <graphics/buffers/VertexArray.hpp>
 #include <graphics/Shader.hpp>
 #include <graphics/Renderer2d.hpp>
+#include <graphics/Texture.hpp>
 #include <Maths.hpp>
 
 namespace GameEngine
@@ -16,6 +17,7 @@ namespace GameEngine
         {
             glm::vec3 vertex;
             glm::vec2 uv;
+            float tid;
             uint32_t color;
         };
 
@@ -26,6 +28,7 @@ namespace GameEngine
                 const glm::vec3 Position() const;
                 const glm::vec4 Color() const;
                 const std::vector<glm::vec2> & UV() const;
+                const GLuint TextureID() const;
                 virtual  ~Renderable2d();
 
                 virtual void submit(Renderer2d * renderer) const;
@@ -37,6 +40,7 @@ namespace GameEngine
                 glm::vec3 _position; 
                 glm::vec4 _color;
                 std::vector<glm::vec2> _UV;
+                Texture * _texture;
             
             private:
                 void setUVDefaults();

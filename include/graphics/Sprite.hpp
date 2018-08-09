@@ -11,6 +11,7 @@ namespace GameEngine
         {
             public:
                 Sprite(float x, float y, float width, float height, glm::vec4  color);
+                Sprite(float x, float y, float width, float height, Texture *texture);
                 ~Sprite();
         };
     }

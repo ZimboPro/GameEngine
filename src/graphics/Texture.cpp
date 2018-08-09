@@ -47,5 +47,10 @@ namespace GameEngine
             glBindTexture(GL_TEXTURE_2D, 0);
             return result;
         }
+
+        inline const GLuint Texture::ID() const
+        {
+            return this->_ID;
+        }
     }
 }

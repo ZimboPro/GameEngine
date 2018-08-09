@@ -7,6 +7,7 @@ namespace GameEngine
         Renderable2d::Renderable2d()
         {
             setUVDefaults();
+            this->_texture == nullptr;
         }
 
         Renderable2d::Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color)
@@ -14,6 +15,7 @@ namespace GameEngine
             this->_position = position;
             this->_size = size;
             this->_color = color;
+            this->_texture == nullptr;
             setUVDefaults();
         }
         
@@ -44,6 +46,13 @@ namespace GameEngine
         inline const std::vector<glm::vec2> & Renderable2d::UV() const
         {
             return (this->_UV);
+        }
+
+        inline const GLuint Renderable2d::TextureID() const
+        {
+            if (this->_texture == nullptr)
+                return 0;
+            return this->_texture->ID();
         }
 
         void Renderable2d::setUVDefaults()

@@ -27,11 +27,12 @@ namespace GameEngine
             
             glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
             glEnableVertexAttribArray(SHADER_UV_INDEX);
+            glEnableVertexAttribArray(SHADER_TID_INDEX);
             glEnableVertexAttribArray(SHADER_COLOR_INDEX);
             
             glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, static_cast<const GLvoid *>(0));
-            //glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, VertexData::color)));
             glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, uv)));
+            glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, tid)));
             glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, color)));
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -67,32 +68,67 @@ namespace GameEngine
             const glm::vec2 size = renderable->getSize();
             const glm::vec4 color = renderable->Color();
             const std::vector<glm::vec2>& uv = renderable->UV();
+            const GLuint tid = renderable->TextureID();
 
-            int r = color.x * 255.0f;
-            int g = color.y * 255.0f;
-            int b = color.z * 255.0f;
-            int a = color.w * 255.0f;
+            float ts = 0.0f;
+            uint32_t c = 0;
+            if (tid > 0)
+            {
+                bool found = false;
+                for (size_t i = 0; i < this->_textureSlots.size(); i++)
+                {
+                    if (this->_textureSlots[i] == tid)
+                    {
+                        ts = static_cast<float>(i + 1);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    if (this->_textureSlots.size() >= 32)
+                    {
+                        end();
+                        flush();
+                        begin();
+                    }
+                    this->_textureSlots.push_back(tid);
+                    ts = static_cast<float>(this->_textureSlots.size());
+                }
+            }
+            else
+            {
+                int r = color.x * 255.0f;
+                int g = color.y * 255.0f;
+                int b = color.z * 255.0f;
+                int a = color.w * 255.0f;
 
-            uint32_t c = a << 24 | b << 16 | g << 8 | r;
+                c = a << 24 | b << 16 | g << 8 | r;
+            }
+
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon, 1.0f);
             this->_buffer->color = c;
             this->_buffer->uv = uv[0];
+            this->_buffer->tid = ts;
             this->_buffer++;
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x, positon.y + size.y, positon.z, 1.0f);
             this->_buffer->color = c;
             this->_buffer->uv = uv[1];
+            this->_buffer->tid = ts;
             this->_buffer++;
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y + size.y, positon.z, 1.0f);
             this->_buffer->uv = uv[2];
             this->_buffer->color = c;
+            this->_buffer->tid = ts;
             this->_buffer++;
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y, positon.z, 1.0f);
             this->_buffer->uv = uv[3];
             this->_buffer->color = c;
+            this->_buffer->tid = ts;
             this->_buffer++;
 
             this->_count += 6;
@@ -106,6 +142,12 @@ namespace GameEngine
 
         void Batch2dRenderer::flush()
         {
+            for (size_t i = 0; i < this->_textureSlots.size(); i++)
+            {
+                glActiveTexture(GL_TEXTURE0 + i);
+                glBindTexture(GL_TEXTURE_2D, this->_textureSlots[i]);
+            }
+
             glBindVertexArray(this->_vao);
             this->_ibo->bind();
 
