@@ -80,9 +80,11 @@ add_library(
     src/graphics/Batch2dRenderer.cpp
     src/graphics/StaticSprite.cpp
     src/graphics/Sprite.cpp
+    src/graphics/Texture.cpp
 
     src/utils/FileUtils.cpp
     src/utils/Times.cpp
+    src/utils/ImageLoad.cpp
     
     src/graphics/buffers/Buffer.cpp
     src/graphics/buffers/IndexBuffer.cpp
