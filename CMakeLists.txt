@@ -68,6 +68,20 @@ endif()
 
 include_directories(${glm_SOURCE_DIR})
 
+# FetchContent_Declare(
+#     freetype
+#     GIT_REPOSITORY https://github.com/rougier/freetype-gl.git
+# )
+
+# FetchContent_GetProperties(freetype)
+
+# if(NOT freetype_POPULATED)
+#     FetchContent_Populate(freetype)
+#     add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
+# endif()
+
+# include_directories(${freetype_SOURCE_DIR}/include)
+
 include_directories(include)
 
 add_library(
@@ -106,3 +120,6 @@ target_link_libraries(${NAME} ${OPENGL_gl_LIBRARY})
 if (OPENGL_GLU_FOUND)
     target_link_libraries(${NAME} ${OPENGL_glu_LIBRARY})
 endif()
+
+find_library(freetype REQUIRED)
+target_link_libraries(${NAME} ${FREETYPE_LIBRARY})
