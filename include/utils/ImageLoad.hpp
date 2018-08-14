@@ -1,8 +1,8 @@
 #ifndef IMAGELOAD_HPP
 #define IMAGELOAD_HPP
 
-#include <string>
 #include <FreeImage.h>
+#include <string>
 
 namespace GameEngine
 {

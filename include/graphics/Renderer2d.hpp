@@ -22,6 +22,7 @@ namespace GameEngine
                 virtual void flush() = 0;
                 void push(glm::mat4 matrix, bool OverRide = false);
                 void pop();
+                virtual void drawString(const std::string & text, const glm::vec3 & position, const glm::vec4 & color) = 0;
 
             protected:
                 glm::mat4 *_transformationBack;

@@ -40,7 +40,7 @@ if(NOT freeimage_POPULATED)
     add_subdirectory(${freeimage_SOURCE_DIR} ${freeimage_BINARY_DIR})
 endif()
 
-include_directories(${freeimage_SOURCE_DIR}/include)
+include_directories(${freeimage_SOURCE_DIR})
 
 FetchContent_Declare(
     glad
@@ -77,11 +77,12 @@ FetchContent_GetProperties(freetype-gl)
 
 if(NOT freetype-gl_POPULATED)
     FetchContent_Populate(freetype-gl)
-    set(freetype-gl_WITH_GLEW_DEFAULT OFF CACHE BOOL "" FORCE)ß
+    set(freetype-gl_WITH_GLEW_DEFAULT OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_APIDOC OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_HARFBUZZ OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(freetype-gl_BUILD_MAKEFONT OFF CACHE BOOL "" FORCE)
     add_subdirectory(${freetype-gl_SOURCE_DIR} ${freetype-gl_BINARY_DIR})
 endif()
 
@@ -100,6 +101,7 @@ add_library(
     src/graphics/StaticSprite.cpp
     src/graphics/Sprite.cpp
     src/graphics/Texture.cpp
+    src/graphics/Label.cpp
 
     src/utils/FileUtils.cpp
     src/utils/Times.cpp
@@ -127,4 +129,4 @@ if (OPENGL_GLU_FOUND)
 endif()
 
 find_library(freetype-gl2 REQUIRED)
-target_link_libraries(${NAME} ${FREETYPE-gl_LIBRARY})
+target_link_libraries(${NAME} ${FREETYPE-gl2_LIBRARY})

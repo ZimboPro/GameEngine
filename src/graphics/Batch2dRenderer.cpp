@@ -1,4 +1,5 @@
 #include <graphics/Batch2dRenderer.hpp>
+#include <freetype-gl/freetype-gl.h>
 
 namespace GameEngine
 {
@@ -54,6 +55,11 @@ namespace GameEngine
 
             this->_ibo = new IndexBuffer(indices, RENDER_INDICES_SIZE);
             glBindVertexArray(0);
+
+            this->_FTAtlas = ftgl::texture_atlas_new(512, 512, 1);
+            this->_FTFont = ftgl::texture_font_new_from_file(this->_FTAtlas, 20, "arial.ttf");
+
+            ftgl::texture_font_get_glyph(this->_FTFont, 'A');
         }
 
         void Batch2dRenderer::begin()
@@ -157,6 +163,56 @@ namespace GameEngine
             glBindVertexArray(0);
 
             this->_count = 0;
+        }
+
+        void Batch2dRenderer::drawString(const std::string & text, glm::vec3 position, const glm::vec4 & color)
+        {
+            float ts = 0.0f;
+            uint32_t c = 0;
+
+            bool found = false;
+            for (size_t i = 0; i < this->_textureSlots.size(); i++)
+            {
+                if (this->_textureSlots[i] == this->_FTAtlas->id)
+                {
+                    ts = static_cast<float>(i + 1);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                if (this->_textureSlots.size() >= 32)
+                {
+                    end();
+                    flush();
+                    begin();
+                }
+                this->_textureSlots.push_back(this->_FTAtlas->id);
+                ts = static_cast<float>(this->_textureSlots.size());
+            }
+
+            this->_buffer->vertex = glm::vec3(-8, -8, 0);
+            this->_buffer->uv = glm::vec2(0, 1);
+            this->_buffer->tid = ts;
+            this->_buffer++;
+
+            this->_buffer->vertex = glm::vec3(-8, 8, 0);
+            this->_buffer->uv = glm::vec2(0, 0);
+            this->_buffer->tid = ts;
+            this->_buffer++;
+
+            this->_buffer->vertex = glm::vec3(8, 8, 0);
+            this->_buffer->uv = glm::vec2(1, 0);
+            this->_buffer->tid = ts;
+            this->_buffer++;
+
+            this->_buffer->vertex = glm::vec3(8, -8, 0);
+            this->_buffer->uv = glm::vec2(1, 1);
+            this->_buffer->tid = ts;
+            this->_buffer++;
+
+            this->_count += 6;
         }
     }
 }

@@ -50,9 +50,7 @@ namespace GameEngine
 
         inline const GLuint Renderable2d::TextureID() const
         {
-            if (this->_texture == nullptr)
-                return 0;
-            return this->_texture->ID();
+            return (this->_texture == nullptr) ? 0 : this->_texture->ID();
         }
 
         void Renderable2d::setUVDefaults()

@@ -1,13 +1,14 @@
 #include <utils/Times.hpp>
+#include <utils/ImageLoad.hpp>
 
 namespace GameEngine
 {
-    BYTE * load_image(const char * path, unsigned int & width, unsigned int & height)
+    BYTE * load_image(const char * filename, unsigned int & width, unsigned int & height)
     {
         FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
         FIBITMAP *dib = nullptr;
         
-        fif = FreeImage_GetFileType(path, 0);
+        fif = FreeImage_GetFileType(filename, 0);
         if(fif == FIF_UNKNOWN) 
             fif = FreeImage_GetFIFFromFilename(filename);
         if(fif == FIF_UNKNOWN)

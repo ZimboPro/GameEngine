@@ -38,11 +38,11 @@ namespace GameEngine
         {
             BYTE * pixels = load_image(this->_path.c_str(), this->_width, this->_height);
 
-            Gluint result;
+            GLuint result;
             glGenTextures(1, &result);
             glBindTexture(GL_TEXTURE_2D, result);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(this->_width), static_cast<GLsizei>(this->_height),0 , GL_BGR, GL_UNSIGNED_BYTE, pixels);
             glBindTexture(GL_TEXTURE_2D, 0);
             return result;
@@ -50,7 +50,7 @@ namespace GameEngine
 
         inline const GLuint Texture::ID() const
         {
-            return this->_ID;
+            return this->_textureID;
         }
     }
 }

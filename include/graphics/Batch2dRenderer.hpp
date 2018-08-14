@@ -29,6 +29,7 @@ namespace GameEngine
                 virtual void submit(const Renderable2d * renderable) ;
                 virtual void flush();
                 virtual void begin();
+                virtual void drawString(const std::string & text, const glm::vec3 & position, const glm::vec4 & color);
                 virtual void end();
 
             private:
@@ -38,6 +39,8 @@ namespace GameEngine
                 GLuint _vbo;
                 VertexData * _buffer;
                 std::vector<GLuint> _textureSlots;
+                ftgl::texture_atlas_t * _FTAtlas;
+                ftgl::texture_font_t * _FTFont;
 
                 void Init();
         };

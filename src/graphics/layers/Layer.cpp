@@ -43,6 +43,9 @@ namespace GameEngine
             {
                 this->_renderer->submit(renderable);
             }
+
+            this->_renderer->drawString("", glm::vec3(0), glm::vec4(0,0, 0, 0));
+
             this->_renderer->end();
 
             this->_renderer->flush();
