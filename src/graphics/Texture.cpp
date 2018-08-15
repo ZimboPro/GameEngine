@@ -45,6 +45,9 @@ namespace GameEngine
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(this->_width), static_cast<GLsizei>(this->_height),0 , GL_BGR, GL_UNSIGNED_BYTE, pixels);
             glBindTexture(GL_TEXTURE_2D, 0);
+
+            delete [] pixels;
+
             return result;
         }
 

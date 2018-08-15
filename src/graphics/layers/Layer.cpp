@@ -34,6 +34,12 @@ namespace GameEngine
             this->_renderables.push_back(renderable);
         }
 
+        inline const std::vector<Renderable2d *> & Layer::Renderables() const
+        {
+            return this->_renderables;
+        }
+
+
         void Layer::render()
         {
             this->_shader->enable();
@@ -44,7 +50,7 @@ namespace GameEngine
                 this->_renderer->submit(renderable);
             }
 
-            this->_renderer->drawString("", glm::vec3(0), glm::vec4(0,0, 0, 0));
+            this->_renderer->drawString("", glm::vec3(0), 0);
 
             this->_renderer->end();
 

@@ -71,12 +71,12 @@ namespace GameEngine
         {
             const glm::vec3 positon = renderable->Position();
             const glm::vec2 size = renderable->getSize();
-            const glm::vec4 color = renderable->Color();
+            const uint32_t color = renderable->Color();
             const std::vector<glm::vec2>& uv = renderable->UV();
             const GLuint tid = renderable->TextureID();
 
             float ts = 0.0f;
-            uint32_t c = 0;
+            uint32_t c = renderable->Color();
             if (tid > 0)
             {
                 bool found = false;
@@ -101,15 +101,6 @@ namespace GameEngine
                     ts = static_cast<float>(this->_textureSlots.size());
                 }
             }
-            // else
-            // {
-                int r = color.x * 255.0f;
-                int g = color.y * 255.0f;
-                int b = color.z * 255.0f;
-                int a = color.w * 255.0f;
-
-                c = a << 24 | b << 16 | g << 8 | r;
-            // }
 
 
             this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon, 1.0f);
@@ -164,17 +155,9 @@ namespace GameEngine
             this->_count = 0;
         }
 
-        void Batch2dRenderer::drawString(const std::string & text, const glm::vec3 & position, const glm::vec4 & color)
+        void Batch2dRenderer::drawString(const std::string & text, const glm::vec3 & position, const uint32_t & color)
         {
             float ts = 0.0f;
-            uint32_t col = 0;
-
-            int r = color.x * 255.0f;
-            int g = color.y * 255.0f;
-            int b = color.z * 255.0f;
-            int a = color.w * 255.0f;
-
-            col = a << 24 | b << 16 | g << 8 | r;
 
             bool found = false;
             for (size_t i = 0; i < this->_textureSlots.size(); i++)
@@ -206,6 +189,7 @@ namespace GameEngine
             for (size_t i = 0; i < text.length(); i++)
             {
                 char c = text[i];
+                uint32_t col = color;
                 texture_glyph_t * glyph = ftgl::texture_font_get_glyph(this->_FTFont, &c);
                 if (glyph != NULL)
                 {

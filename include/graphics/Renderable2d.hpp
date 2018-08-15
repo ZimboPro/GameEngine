@@ -26,19 +26,22 @@ namespace GameEngine
             public:
                 const glm::vec2 getSize() const;
                 const glm::vec3 Position() const;
-                const glm::vec4 Color() const;
+                const uint32_t Color() const;
                 const std::vector<glm::vec2> & UV() const;
                 const GLuint TextureID() const;
                 virtual  ~Renderable2d();
 
                 virtual void submit(Renderer2d * renderer) const;
+                void setColor(uint32_t color);
+                void setColor(glm::vec4 color);
 
             protected:
                 Renderable2d();
-                Renderable2d(glm::vec2 size, glm::vec3 position, glm::vec4 color);
+                Renderable2d(glm::vec2 size, glm::vec3 position, uint32_t color);
                 glm::vec2 _size;
                 glm::vec3 _position; 
-                glm::vec4 _color;
+                // glm::vec4 _color;
+                uint32_t _color;
                 std::vector<glm::vec2> _UV;
                 Texture * _texture;
             

@@ -4,7 +4,7 @@ namespace GameEngine
 {
     namespace graphics
     {
-        Label::Label(std::string text, float x, float y, glm::vec4 color) : Renderable2d()
+        Label::Label(std::string text, float x, float y, uint32_t color) : Renderable2d()
         {
             this->_text = text;
             this->_texture = nullptr;

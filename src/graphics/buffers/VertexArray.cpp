@@ -29,10 +29,10 @@ namespace GameEngine
             glEnableVertexArrayAttrib(this->_arrayID ,index);
             glVertexAttribPointer(index, buffer->ComponentCount(),GL_FLOAT, GL_FALSE, 0, 0);
 
-            this->_buffer.push_back(buffer);
-
             buffer->unbind();
             unbind();
+
+            this->_buffer.push_back(buffer);
         }
 
         void VertexArray::bind() const

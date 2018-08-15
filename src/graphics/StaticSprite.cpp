@@ -5,7 +5,7 @@ namespace GameEngine
     namespace graphics
     {
         StaticSprite::StaticSprite(float x, float y, float width, float height, glm::vec4  color, Shader & shader) :
-                 Renderable2d(glm::vec2(width, height) ,glm::vec3(x, y, 0),  color) , _shader(shader)
+                 Renderable2d(glm::vec2(width, height) ,glm::vec3(x, y, 0),  0xffffffff) , _shader(shader)
         {
              this->_vertexArray = new VertexArray();
 

@@ -19,9 +19,17 @@ namespace GameEngine
         if(!dib)
             return nullptr;
 
-        BYTE * bits = FreeImage_GetBits(dib);
+        BYTE * pixels = FreeImage_GetBits(dib);
         width = FreeImage_GetWidth(dib);
         height = FreeImage_GetHeight(dib);
+
+        unsigned int bpp = FreeImage_GetBPP(dib);
+
+        unsigned int size = width * height * (bpp >> 3);
+        BYTE *bits = new BYTE[size];
+        memcpy(bits, pixels, size);
+
+        FreeImage_Unload(dib);
         return bits;
     }
 }

@@ -10,7 +10,7 @@ namespace GameEngine
         class Label : public Renderable2d
         {
             public:
-                Label(std::string text, float x, float y, glm::vec4 color);
+                Label(std::string text, float x, float y, uint32_t color);
                 virtual ~Label();
                 virtual void submit(Renderer2d * renderer) const;
 

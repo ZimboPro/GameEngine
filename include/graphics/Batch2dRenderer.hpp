@@ -30,7 +30,7 @@ namespace GameEngine
                 virtual void submit(const Renderable2d * renderable) ;
                 virtual void flush();
                 virtual void begin();
-                virtual void drawString(const std::string & text, const glm::vec3 & position, const glm::vec4 & color);
+                virtual void drawString(const std::string & text, const glm::vec3 & position, const uint32_t & color);
                 virtual void end();
 
             private:

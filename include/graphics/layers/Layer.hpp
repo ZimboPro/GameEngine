@@ -17,6 +17,8 @@ namespace GameEngine
                 virtual void add(Renderable2d * renderable);
                 virtual void render();
 
+                const std::vector<Renderable2d *> & Renderables() const;
+
             protected:
                 Layer(Renderer2d * renderer, Shader *shader, glm::mat4 projMatrix);
                 Renderer2d * _renderer;

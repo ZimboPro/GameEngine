@@ -23,6 +23,14 @@ namespace GameEngine
             Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
             win->_buttons[button] = action != GLFW_RELEASE;
         }
+
+        void window_resize(GLFWwindow * window, int width, int height)
+        {
+            glViewport(0, 0, width, height);
+            Window *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+            win->_height = height;
+            win->_width = width;
+        }
         
 
         Window::Window(const char *title, unsigned int w, unsigned int h) : _title(title)
@@ -33,9 +41,17 @@ namespace GameEngine
                 glfwTerminate();
             
             for (int i = 0; i < MAX_KEYS; i++)
+            {
                 this->_keys[i] = false;
+                this->_keyState[i] = false;
+                this->_keyTyped[i] = false;
+            }
             for (int i = 0; i < MAX_BUTTONS; i++)
+            {
                 this->_buttons[i] = false;
+                this->_buttonState[i] = false;
+                this->_buttonClicked[i] = false;
+            }
         }
 
         Window::~Window()
@@ -45,6 +61,15 @@ namespace GameEngine
 
         void Window::update()
         {
+            for (int i = 0; i < MAX_KEYS; i++)
+                this->_keyTyped[i] = this->_keys[i] && !this->_keyState[i];
+            memcpy(this->_keyState, this->_keys, MAX_KEYS);
+
+            for (int i = 0; i < MAX_BUTTONS; i++)
+                this->_buttonClicked[i] = this->_buttons[i] && !this->_buttonState[i];
+            memcpy(this->_buttonState, this->_buttons, MAX_BUTTONS);
+
+
             GLenum error = glGetError();
 
             if (error != GL_NO_ERROR)
@@ -67,11 +92,25 @@ namespace GameEngine
             return _keys[keycode];
         }
 
+        bool Window::isKeyTyped(int keycode) const
+        {
+            if (keycode >= MAX_KEYS)
+                return false;
+            return _keyTyped[keycode];
+        }
+
         bool Window::isButtonPressed(int button) const
         {
             if (button >= MAX_BUTTONS)
                 return false;
             return _buttons[button];
+        }
+
+        bool Window::isButtonClicked(int button) const
+        {
+            if (button >= MAX_BUTTONS)
+                return false;
+            return this->_buttonClicked [button];
         }
 
         void Window::CursorPostion(double &x, double & y) const
@@ -94,6 +133,7 @@ namespace GameEngine
             glfwSetKeyCallback(this->_win, key_callback);
             glfwSetCursorPosCallback(this->_win, cursor_position_callback);
             glfwSetMouseButtonCallback(this->_win, mouse_button_callback);
+            glfwSetFramebufferSizeCallback(this->_win, window_resize);
 
             //doesn't cap fps
             glfwSwapInterval(0.0);
@@ -137,21 +177,5 @@ namespace GameEngine
         {
             return this->_height;
         }
-
-        bool Window::hasResized()
-        {
-            int h;
-            int w;
-            glfwGetFramebufferSize(this->_win, &w, &h);
-            if (this->_width != static_cast<unsigned int>(w) &&
-                    this->_height != static_cast<unsigned int>(h))
-            {
-                this->_width = w;
-                this->_height = h;
-                glViewport(0, 0, this->_width, this->_height);
-                return true;
-            }
-            return false;
-        } 
     } // namespace graphics
 } // namespace GameEngine
