@@ -10,4 +10,5 @@ Requirements
 ------------
 
 `brew` or `home-brew` needs to be installed if the system doesn't have the `freetype` library already installed.
+
 **NOTE:** It might not work with Windows
