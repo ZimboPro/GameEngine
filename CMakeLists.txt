@@ -12,15 +12,6 @@ else()
     set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 endif()
 
-# add_custom_target(
-#     installFreetype
-#     find_package(Freetype)
-#     if (NOT FREETYPE_FOUND)
-#         message(STATUS "Installing Freetype")
-#         COMMAND "brew install freetype"
-#         message(STATUS "Freetype Installed")
-#     endif()
-# )
 find_package(Freetype)
 if (NOT FREETYPE_FOUND)
     execute_process(COMMAND brew install freetype)
@@ -82,20 +73,6 @@ endif()
 
 include_directories(${glm_SOURCE_DIR})
 
-# FetchContent_Declare(
-#     freetype
-#     GIT_REPOSITORY git://git.sv.nongnu.org/freetype/freetype2.git
-# )
-
-# FetchContent_GetProperties(freetype)
-
-# if(NOT freetype_POPULATED)
-#     FetchContent_Populate(freetype)
-#     add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
-# endif()
-
-# include_directories(${freetype_SOURCE_DIR})
-
 FetchContent_Declare(
     freetype-gl
     GIT_REPOSITORY https://github.com/rougier/freetype-gl.git
@@ -113,9 +90,7 @@ if(NOT freetype-gl_POPULATED)
     add_subdirectory(${freetype-gl_SOURCE_DIR} ${freetype-gl_BINARY_DIR})
 endif()
 
-# target_link_libraries(freetype-gl freetype)
-
-include_directories(${freetype-gl_SOURCE_DIR}/include)
+include_directories(${freetype-gl_SOURCE_DIR})
 
 include_directories(include)
 

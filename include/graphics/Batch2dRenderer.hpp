@@ -5,6 +5,7 @@
 #include <graphics/Renderer2d.hpp>
 #include <graphics/Renderable2d.hpp>
 #include <graphics/buffers/IndexBuffer.hpp>
+#include <freetype-gl.h>
 
 #define RENDER_MAX_SPRITES 10000
 #define RENDER_VERTEX_SIZE sizeof(VertexData)
