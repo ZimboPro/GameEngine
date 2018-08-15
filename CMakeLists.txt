@@ -12,6 +12,20 @@ else()
     set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 endif()
 
+# add_custom_target(
+#     installFreetype
+#     find_package(Freetype)
+#     if (NOT FREETYPE_FOUND)
+#         message(STATUS "Installing Freetype")
+#         COMMAND "brew install freetype"
+#         message(STATUS "Freetype Installed")
+#     endif()
+# )
+find_package(Freetype)
+if (NOT FREETYPE_FOUND)
+    execute_process(COMMAND brew install freetype)
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -68,6 +82,20 @@ endif()
 
 include_directories(${glm_SOURCE_DIR})
 
+# FetchContent_Declare(
+#     freetype
+#     GIT_REPOSITORY git://git.sv.nongnu.org/freetype/freetype2.git
+# )
+
+# FetchContent_GetProperties(freetype)
+
+# if(NOT freetype_POPULATED)
+#     FetchContent_Populate(freetype)
+#     add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
+# endif()
+
+# include_directories(${freetype_SOURCE_DIR})
+
 FetchContent_Declare(
     freetype-gl
     GIT_REPOSITORY https://github.com/rougier/freetype-gl.git
@@ -80,11 +108,12 @@ if(NOT freetype-gl_POPULATED)
     set(freetype-gl_WITH_GLEW_DEFAULT OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_APIDOC OFF CACHE BOOL "" FORCE)
-    set(freetype-gl_BUILD_HARFBUZZ OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(freetype-gl_BUILD_MAKEFONT OFF CACHE BOOL "" FORCE)
     add_subdirectory(${freetype-gl_SOURCE_DIR} ${freetype-gl_BINARY_DIR})
 endif()
+
+# target_link_libraries(freetype-gl freetype)
 
 include_directories(${freetype-gl_SOURCE_DIR}/include)
 
@@ -120,6 +149,7 @@ add_library(
 
 target_link_libraries(${NAME} glfw)
 target_link_libraries(${NAME} freeimage)
+target_link_libraries(${NAME} freetype-gl)
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(${NAME} ${OPENGL_gl_LIBRARY})
@@ -127,6 +157,3 @@ target_link_libraries(${NAME} ${OPENGL_gl_LIBRARY})
 if (OPENGL_GLU_FOUND)
     target_link_libraries(${NAME} ${OPENGL_glu_LIBRARY})
 endif()
-
-find_library(freetype-gl2 REQUIRED)
-target_link_libraries(${NAME} ${FREETYPE-gl2_LIBRARY})
