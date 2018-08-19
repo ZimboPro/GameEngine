@@ -24,12 +24,12 @@ namespace GameEngine
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
-        inline const unsigned int Texture::Width() const
+         const unsigned int Texture::Width() const
         {
             return this->_width;
         }
 
-        inline const unsigned int Texture::Height() const
+         const unsigned int Texture::Height() const
         {
             return this->_height;
         }
@@ -51,7 +51,7 @@ namespace GameEngine
             return result;
         }
 
-        inline const GLuint Texture::ID() const
+         const GLuint Texture::ID() const
         {
             return this->_textureID;
         }

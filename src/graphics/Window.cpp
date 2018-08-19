@@ -1,5 +1,6 @@
 #include <graphics/Window.hpp>
 #include <iostream>
+#include <cstring>
 
 namespace GameEngine
 {
@@ -168,12 +169,12 @@ namespace GameEngine
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
-        inline unsigned int Window::Width() const
+        unsigned int Window::Width() const
         {
             return this->_width;
         }
 
-        inline unsigned int Window::Height() const
+        unsigned int Window::Height() const
         {
             return this->_height;
         }

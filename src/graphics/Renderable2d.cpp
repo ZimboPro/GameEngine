@@ -22,33 +22,33 @@ namespace GameEngine
         Renderable2d::~Renderable2d()
         {}
 
-        inline  const glm::vec3 Renderable2d::Position() const
+          const glm::vec3 Renderable2d::Position() const
         {
             return (this->_position);
         }
 
-        inline const glm::vec2 Renderable2d::getSize() const
+         const glm::vec2 Renderable2d::getSize() const
         {
             return (this->_size);
         }
 
-        inline const uint32_t Renderable2d::Color() const
+         const uint32_t Renderable2d::Color() const
         {
             return (this->_color);
         }
 
-        inline void Renderable2d::submit(Renderer2d * renderer) const
+         void Renderable2d::submit(Renderer2d * renderer) const
         {
             const Renderable2d * render = this;
             renderer->submit(render);
         }
 
-        inline const std::vector<glm::vec2> & Renderable2d::UV() const
+         const std::vector<glm::vec2> & Renderable2d::UV() const
         {
             return (this->_UV);
         }
 
-        inline const GLuint Renderable2d::TextureID() const
+         const GLuint Renderable2d::TextureID() const
         {
             return (this->_texture == nullptr) ? 0 : this->_texture->ID();
         }
@@ -61,7 +61,7 @@ namespace GameEngine
             this->_UV.push_back(glm::vec2(1,0));
         }
 
-        inline void Renderable2d::setColor(uint32_t color)
+         void Renderable2d::setColor(uint32_t color)
         {
             this->_color = color;
         }

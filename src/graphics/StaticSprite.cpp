@@ -38,17 +38,17 @@ namespace GameEngine
             delete this->_vertexArray;
         }
 
-        inline const VertexArray* StaticSprite::getVAO() const
+         const VertexArray* StaticSprite::getVAO() const
         {
             return this->_vertexArray;
         }
 
-        inline const IndexBuffer* StaticSprite::getIBO() const
+         const IndexBuffer* StaticSprite::getIBO() const
         {
             return this->_indexBuffer;
         }
 
-        inline const Shader & StaticSprite::getShader() const
+         const Shader & StaticSprite::getShader() const
         {
             return (this->_shader);
         }

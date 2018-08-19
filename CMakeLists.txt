@@ -4,11 +4,12 @@ project(GameEngine)
 
 set(NAME GameEngine)
 
-set(CXX_STANDARD 17)
 
 if (APPLE)
+    set(CXX_STANDARD 17)
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -stdlib=libc++")
 else()
+    set(CXX_STANDARD 11)
     set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 endif()
 
@@ -123,7 +124,7 @@ add_library(
 )
 
 target_link_libraries(${NAME} glfw)
-target_link_libraries(${NAME} freeimage)
+target_link_libraries(${NAME} freeimage jpeg mng openjpeg png rawlite tiff openexr zlib)
 target_link_libraries(${NAME} freetype-gl)
 
 find_package(OpenGL REQUIRED)

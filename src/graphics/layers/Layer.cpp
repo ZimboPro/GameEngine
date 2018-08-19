@@ -34,7 +34,7 @@ namespace GameEngine
             this->_renderables.push_back(renderable);
         }
 
-        inline const std::vector<Renderable2d *> & Layer::Renderables() const
+         const std::vector<Renderable2d *> & Layer::Renderables() const
         {
             return this->_renderables;
         }

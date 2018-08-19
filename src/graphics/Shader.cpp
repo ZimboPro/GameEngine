@@ -73,7 +73,7 @@ namespace GameEngine
             return program;
         }
 
-        inline GLuint Shader::Value() const
+         GLuint Shader::Value() const
         {
             return (this->_shader);
         }
