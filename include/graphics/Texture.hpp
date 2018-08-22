@@ -14,18 +14,19 @@ namespace GameEngine
                 Texture(const std::string& path);
                 ~Texture();
 
-                void bind() const;
-                void unbind() const;
-                const unsigned int Width() const;
-                const unsigned int Height() const;
-                const GLuint ID() const;
+                void bind() ;
+                void unbind() ;
+                unsigned int Width() ;
+                unsigned int Height() ;
+                GLuint ID() ;
             private:
                 std::string _path;
                 GLuint _textureID;
-                unsigned int _width;
-                unsigned int _height;
+                int _width;
+                int _height;
+                int _channel;
 
-                GLuint load();
+                void load();
         };
     }
 }

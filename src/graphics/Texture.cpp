@@ -1,5 +1,8 @@
 #include <graphics/Texture.hpp>
-#include <utils/ImageLoad.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+#include <iostream>
+
 
 namespace GameEngine
 {
@@ -8,50 +11,59 @@ namespace GameEngine
         Texture::Texture(const std::string & path)
         {
             this->_path = path;
-            this->_textureID = load();
+            load();
         }
 
         Texture::~Texture()
         {}
 
-        void Texture::bind() const
+        void Texture::bind() 
         {
             glBindTexture(GL_TEXTURE_2D, this->_textureID);
         }
 
-        void Texture::unbind() const
+        void Texture::unbind() 
         {
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
-        inline const unsigned int Texture::Width() const
+        unsigned int Texture::Width() 
         {
             return this->_width;
         }
 
-        inline const unsigned int Texture::Height() const
+        unsigned int Texture::Height() 
         {
             return this->_height;
         }
 
-        GLuint Texture::load()
+        void Texture::load()
         {
-            BYTE * pixels = load_image(this->_path.c_str(), this->_width, this->_height);
+            glGenTextures(1, &this->_textureID);
+            glBindTexture(GL_TEXTURE_2D, this->_textureID);
+            
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            GLuint result;
-            glGenTextures(1, &result);
-            glBindTexture(GL_TEXTURE_2D, result);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(this->_width), static_cast<GLsizei>(this->_height),0 , GL_BGR, GL_UNSIGNED_BYTE, pixels);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            unsigned char * data = stbi_load(this->_path.c_str(), &this->_width, &this->_height, &this->_channel, 0);
+            
+            if (!data)
+                std::cout << "Error loading image" << std::endl;
+            else
+            {
+                if(this->_channel == 3)
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->_width, this->_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                else
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->_width, this->_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
 
-            delete [] pixels;
-
-            return result;
+            stbi_image_free(data);
         }
 
-        inline const GLuint Texture::ID() const
+        GLuint Texture::ID() 
         {
             return this->_textureID;
         }

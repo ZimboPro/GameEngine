@@ -2,8 +2,6 @@
 #define VERTEXARRAY_HPP
 
 #include <vector>
-#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
 #include <graphics/buffers/Buffer.hpp>
 
 namespace GameEngine
@@ -17,8 +15,8 @@ namespace GameEngine
                 ~VertexArray();
                 void addBuffer(Buffer * buffer, GLuint index);
 
-                void bind() const;
-                void unbind() const;
+                void bind() ;
+                void unbind() ;
 
             private:
                 GLuint _arrayID;

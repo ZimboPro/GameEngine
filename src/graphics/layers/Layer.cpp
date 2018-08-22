@@ -1,4 +1,7 @@
 #include <graphics/layers/Layer.hpp>
+#include <graphics/Shader.hpp>
+#include <graphics/Renderer2d.hpp>
+#include <string>
 
 namespace GameEngine
 {
@@ -7,7 +10,7 @@ namespace GameEngine
         Layer::Layer()
         {
             this->_shader->enable();
-            this->_shader->setUniformMat4f("pr_matrix", this->_projectionMatrix);
+            this->_shader->setMat4("pr_matrix", this->_projectionMatrix);
             this->_shader->disable();
         }
 
@@ -17,7 +20,7 @@ namespace GameEngine
             this->_shader = shader;
 
             this->_shader->enable();
-            this->_shader->setUniformMat4f("pr_matrix", this->_projectionMatrix);
+            this->_shader->setMat4("pr_matrix", this->_projectionMatrix);
             this->_shader->disable();
         }
 
@@ -34,7 +37,7 @@ namespace GameEngine
             this->_renderables.push_back(renderable);
         }
 
-        inline const std::vector<Renderable2d *> & Layer::Renderables() const
+         std::vector<Renderable2d *> & Layer::Renderables() 
         {
             return this->_renderables;
         }
@@ -43,17 +46,14 @@ namespace GameEngine
         void Layer::render()
         {
             this->_shader->enable();
-
             this->_renderer->begin();
+
             for (Renderable2d * renderable : this->_renderables)
             {
                 this->_renderer->submit(renderable);
             }
 
-            this->_renderer->drawString("", glm::vec3(0), 0);
-
             this->_renderer->end();
-
             this->_renderer->flush();
         }
     }

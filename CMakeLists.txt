@@ -6,18 +6,28 @@ set(NAME GameEngine)
 
 set(CXX_STANDARD 17)
 
-if (APPLE)
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -stdlib=libc++")
-else()
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-endif()
+set(FETCHCONTENT_QUIET OFF)
 
-find_package(Freetype)
-if (NOT FREETYPE_FOUND)
-    execute_process(COMMAND brew install freetype)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+
+if (APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++") 
 endif()
 
 include(FetchContent)
+
+FetchContent_Declare(
+    glad
+    GIT_REPOSITORY https://github.com/Dav1dde/glad.git
+    GIT_TAG origin/c
+)
+
+FetchContent_GetProperties(glad)
+if(NOT glad_POPULATED)
+    FetchContent_Populate(glad)
+endif()
+
+include_directories(${glad_SOURCE_DIR}/include)
 
 FetchContent_Declare(
     glfw
@@ -28,41 +38,30 @@ FetchContent_GetProperties(glfw)
 
 if(NOT glfw_POPULATED)
     FetchContent_Populate(glfw)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 endif()
 
 include_directories(${glfw_SOURCE_DIR}/include)
 
 FetchContent_Declare(
-    freeimage
-    GIT_REPOSITORY https://github.com/Kanma/FreeImage.git
+    std_image
+    GIT_REPOSITORY https://github.com/jschmidt42/stb-cmake.git
 )
 
-FetchContent_GetProperties(freeimage)
+FetchContent_GetProperties(std_image)
 
-if(NOT freeimage_POPULATED)
-    FetchContent_Populate(freeimage)
-    add_subdirectory(${freeimage_SOURCE_DIR} ${freeimage_BINARY_DIR})
+if(NOT std_image_POPULATED)
+  FetchContent_Populate(std_image)
 endif()
 
-include_directories(${freeimage_SOURCE_DIR})
-
-FetchContent_Declare(
-    glad
-    GIT_REPOSITORY https://github.com/Dav1dde/glad.git
-    GIT_TAG origin/c
-)
-
-FetchContent_GetProperties(glad)
-if(NOT glad_POPULATED)
-  FetchContent_Populate(glad)
-endif()
-
-include_directories(${glad_SOURCE_DIR}/include)
+include_directories(${std_image_SOURCE_DIR})
 
 FetchContent_Declare(
     glm
-    URL https://github.com/g-truc/glm/archive/0.9.9.0.zip
+    URL https://github.com/g-truc/glm/archive/0.9.7.0.zip
 )
 
 FetchContent_GetProperties(glm)
@@ -74,42 +73,59 @@ endif()
 include_directories(${glm_SOURCE_DIR})
 
 FetchContent_Declare(
-    freetype-gl
-    GIT_REPOSITORY https://github.com/rougier/freetype-gl.git
+    freetype
+    GIT_REPOSITORY git://git.sv.nongnu.org/freetype/freetype2.git
 )
 
-FetchContent_GetProperties(freetype-gl)
+FetchContent_GetProperties(freetype)
 
-if(NOT freetype-gl_POPULATED)
-    FetchContent_Populate(freetype-gl)
-    set(freetype-gl_WITH_GLEW_DEFAULT OFF CACHE BOOL "" FORCE)
-    set(freetype-gl_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
-    set(freetype-gl_BUILD_APIDOC OFF CACHE BOOL "" FORCE)
-    set(freetype-gl_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-    set(freetype-gl_BUILD_MAKEFONT OFF CACHE BOOL "" FORCE)
-    add_subdirectory(${freetype-gl_SOURCE_DIR} ${freetype-gl_BINARY_DIR})
+if(NOT freetype_POPULATED)
+    FetchContent_Populate(freetype)
+    set(FT_WITH_PNG ON CACHE BOOL "" FORCE)
+    set(FT_WITH_ZLIB ON CACHE BOOL "" FORCE)
+    add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
 endif()
 
-include_directories(${freetype-gl_SOURCE_DIR})
+include_directories(${freetype_SOURCE_DIR})
 
-include_directories(include)
+FetchContent_Declare(
+    assimp
+    URL https://github.com/assimp/assimp/archive/v4.1.0.zip
+)
 
-add_library(
+FetchContent_GetProperties(assimp)
+
+if(NOT assimp_POPULATED)
+  FetchContent_Populate(assimp)
+  set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+  set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+  add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+endif()
+
+include_directories(
+    ${assimp_SOURCE_DIR}/include
+
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+# add_library(
+add_executable(
     ${NAME}
+    main.cpp
     src/graphics/Window.cpp
     src/graphics/Shader.cpp
     src/graphics/Renderable2d.cpp
     src/graphics/Renderer2d.cpp
-    src/graphics/SimpleRenderer2d.cpp
     src/graphics/Batch2dRenderer.cpp
-    src/graphics/StaticSprite.cpp
     src/graphics/Sprite.cpp
     src/graphics/Texture.cpp
     src/graphics/Label.cpp
+    src/graphics/Font.cpp
+    src/graphics/FontManager.cpp
 
     src/utils/FileUtils.cpp
     src/utils/Times.cpp
-    src/utils/ImageLoad.cpp
     
     src/graphics/buffers/Buffer.cpp
     src/graphics/buffers/IndexBuffer.cpp
@@ -122,12 +138,9 @@ add_library(
     ${glad_SOURCE_DIR}/src/glad.c
 )
 
-target_link_libraries(${NAME} glfw)
-target_link_libraries(${NAME} freeimage)
-target_link_libraries(${NAME} freetype-gl)
-
 find_package(OpenGL REQUIRED)
-target_link_libraries(${NAME} ${OPENGL_gl_LIBRARY})
+
+target_link_libraries(${NAME} glfw freetype assimp ${OPENGL_gl_LIBRARY})
 
 if (OPENGL_GLU_FOUND)
     target_link_libraries(${NAME} ${OPENGL_glu_LIBRARY})

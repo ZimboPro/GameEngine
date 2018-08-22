@@ -1,9 +1,9 @@
 #ifndef SHADER_HPP
 #define SHADER_HPP
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <Maths.hpp>
+#include <glad/glad.h>
+#include <iostream>
 
 namespace GameEngine
 {
@@ -12,36 +12,35 @@ namespace GameEngine
         class Shader
         {
             public:
-                Shader(const char * vertPath, const char * fragPath);
+                Shader(const std::string & vertexpath, const std::string & fragpath);
                 ~Shader();
 
                 void enable();
                 void disable();
-                GLuint Value() const;
+                unsigned int ID() const;
+                
+                void setBool(const std::string &name, bool value) const;  
+                void setInt(const std::string &name, int value) const;   
+                void setFloat(const std::string &name, float value) const;
 
-                void setUniform1f(const GLchar * name, float value);
-                void setUniform1i(const GLchar * name, int value);
-                void setUniform1fv(const GLchar * name, int count, float* value);
-                void setUniform1iv(const GLchar * name, int count, int* value);
-                void setUniform2f(const GLchar * name, glm::vec2 value);
-                void setUniform3f(const GLchar * name, glm::vec3 value);
-                void setUniform4f(const GLchar * name, glm::vec4 value);
-                void setUniformMat4f(const GLchar * name, glm::mat4 value);
+                void setVec2(const std::string &name, const glm::vec2 &value) const;
+                void setVec2(const std::string &name, float x, float y) const;
+                void setVec3(const std::string &name, const glm::vec3 &value) const;
+                void setVec3(const std::string &name, float x, float y, float z) const;
+                void setVec4(const std::string &name, const glm::vec4 &value) const;
+                void setVec4(const std::string &name, float x, float y, float z, float w) const;
 
-                void setUniform1f(const GLchar * name, float value) const;
-                void setUniform1i(const GLchar * name, int value) const;
-                void setUniform2f(const GLchar * name, glm::vec2 value) const;
-                void setUniform3f(const GLchar * name, glm::vec3 value) const;
-                void setUniform4f(const GLchar * name, glm::vec4 value) const;
-                void setUniformMat4f(const GLchar * name, glm::mat4 value) const;
-
+                void setMat2(const std::string &name, const glm::mat2 &mat) const;
+                void setMat3(const std::string &name, const glm::mat3 &mat) const;
+                void setMat4(const std::string &name, const glm::mat4 &mat) const;
+                void setMat4Complete(const std::string &name, const glm::mat4 &mat) const;
+            
             private:
-                GLint UniformLocation(const GLchar * name);
-                GLint UniformLocation(const GLchar * name) const;
-                GLuint _shader;
-                const char * _vertPath;
-                const char * _fragPath;
-                GLuint Load();
+                void CreateShaderProgam(int vs, int fs);
+                unsigned int CompileShader(unsigned int type, const char * src);
+                std::string const GetSource(const std::string & path);
+
+                unsigned int _ID;
         };
     }
 }

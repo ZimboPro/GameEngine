@@ -1,7 +1,6 @@
 #ifndef LAYER_HPP
 #define LAYER_HPP
 
-#include <graphics/Renderer2d.hpp>
 #include <graphics/Renderable2d.hpp>
 #include <vector>
 
@@ -17,7 +16,7 @@ namespace GameEngine
                 virtual void add(Renderable2d * renderable);
                 virtual void render();
 
-                const std::vector<Renderable2d *> & Renderables() const;
+                 std::vector<Renderable2d *> & Renderables() ;
 
             protected:
                 Layer(Renderer2d * renderer, Shader *shader, glm::mat4 projMatrix);

@@ -1,4 +1,5 @@
 #include <graphics/Window.hpp>
+#include <graphics/FontManager.hpp>
 #include <iostream>
 
 namespace GameEngine
@@ -56,6 +57,7 @@ namespace GameEngine
 
         Window::~Window()
         {
+            FontManager::clean();
             glfwTerminate();
         }
 
@@ -79,41 +81,41 @@ namespace GameEngine
             glfwPollEvents();
         }
 
-        bool failed(char const * str)
+        bool failed(char  * str)
         {
             std::cout << str << std::endl;
             return false;
         }
 
-        bool Window::isKeyPressed(int keycode) const
+        bool Window::isKeyPressed(int keycode) 
         {
             if (keycode >= MAX_KEYS)
                 return false;
             return _keys[keycode];
         }
 
-        bool Window::isKeyTyped(int keycode) const
+        bool Window::isKeyTyped(int keycode) 
         {
             if (keycode >= MAX_KEYS)
                 return false;
             return _keyTyped[keycode];
         }
 
-        bool Window::isButtonPressed(int button) const
+        bool Window::isButtonPressed(int button) 
         {
             if (button >= MAX_BUTTONS)
                 return false;
             return _buttons[button];
         }
 
-        bool Window::isButtonClicked(int button) const
+        bool Window::isButtonClicked(int button) 
         {
             if (button >= MAX_BUTTONS)
                 return false;
             return this->_buttonClicked [button];
         }
 
-        void Window::CursorPostion(double &x, double & y) const
+        void Window::CursorPostion(double &x, double & y) 
         {
             x = _mouseX;
             y = _mouseY;
@@ -123,6 +125,9 @@ namespace GameEngine
         {
             if (!glfwInit())
                 return failed("GameEngine failed to initialise");
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
             this->_win = glfwCreateWindow(this->_width, this->_height,this->_title, NULL, NULL);
@@ -148,18 +153,18 @@ namespace GameEngine
             return true;
         }
 
-        bool Window::closed() const
+        bool Window::closed() 
         {
             return glfwWindowShouldClose(this->_win) == 1;
         }
 
-        void Window::clear() const
+        void Window::clear() 
         {
             int8_t r = 0;
             Window::clear(r, r, r);
         }
 
-        void Window::clear(int8_t & r, int8_t g, int8_t b) const
+        void Window::clear(int8_t & r, int8_t g, int8_t b) 
         {
             float red = static_cast<float>(r) / 255.0f;
             float green = static_cast<float>(g) / 255.0f;
@@ -168,14 +173,14 @@ namespace GameEngine
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
-        inline unsigned int Window::Width() const
+        unsigned int Window::Width() 
         {
             return this->_width;
         }
 
-        inline unsigned int Window::Height() const
+        unsigned int Window::Height() 
         {
             return this->_height;
         }
-    } // namespace graphics
-} // namespace GameEngine
+    }
+}

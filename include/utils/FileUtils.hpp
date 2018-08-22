@@ -1,7 +1,7 @@
 #ifndef FILEUTILS_HPP
 #define FILEUTILS_HPP
 
-#include <string>
+#include <iostream>
 
 namespace GameEngine
 {

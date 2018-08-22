@@ -29,7 +29,7 @@ namespace GameEngine
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER , 0);
         }
 
-        inline GLuint IndexBuffer::Count() const
+        GLuint IndexBuffer::Count() const
         {
             return this->_count;
         }

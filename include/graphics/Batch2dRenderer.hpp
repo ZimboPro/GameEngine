@@ -3,9 +3,7 @@
 
 #include <cstddef>
 #include <graphics/Renderer2d.hpp>
-#include <graphics/Renderable2d.hpp>
-#include <graphics/buffers/IndexBuffer.hpp>
-#include <freetype-gl.h>
+#include <graphics/VertexData.hpp>
 
 #define RENDER_MAX_SPRITES 10000
 #define RENDER_VERTEX_SIZE sizeof(VertexData)
@@ -22,15 +20,18 @@ namespace GameEngine
 {
     namespace graphics
     {
+        class Renderable2d;
+        class Font;
+
         class Batch2dRenderer : public Renderer2d
         {
             public:
                 Batch2dRenderer();
                 virtual ~Batch2dRenderer();
-                virtual void submit(const Renderable2d * renderable) ;
+                virtual void submit( Renderable2d * renderable) ;
                 virtual void flush();
                 virtual void begin();
-                virtual void drawString(const std::string & text, const glm::vec3 & position, const uint32_t & color);
+                virtual void drawString(const std::string & text, const glm::vec3 & position, const Font &font, const uint32_t & color);
                 virtual void end();
 
             private:
@@ -39,10 +40,7 @@ namespace GameEngine
                 GLsizei _count; 
                 GLuint _vbo;
                 VertexData * _buffer;
-                std::vector<GLuint> _textureSlots;
-                ftgl::texture_atlas_t * _FTAtlas;
-                ftgl::texture_font_t * _FTFont;
-
+                std::vector<GLuint > _textureSlots;
                 void Init();
         };
     }

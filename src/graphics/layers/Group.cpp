@@ -21,10 +21,10 @@ namespace GameEngine
             this->_renderables.push_back(renderable);
         }
 
-        void Group::submit(Renderer2d * renderer) const
+        void Group::submit(Renderer2d * renderer) 
         {
             renderer->push(this->_transformationMatrix);
-            for (const Renderable2d * renderable : this->_renderables)
+            for ( Renderable2d * renderable : this->_renderables)
                 renderable->submit(renderer);
             renderer->pop();
         }

@@ -1,5 +1,9 @@
+#include <graphics/buffers/IndexBuffer.hpp>
 #include <graphics/Batch2dRenderer.hpp>
-#include <freetype-gl.h>
+#include <graphics/Renderable2d.hpp>
+#include <graphics/Font.hpp>
+#include <string>
+
 
 namespace GameEngine
 {
@@ -31,10 +35,10 @@ namespace GameEngine
             glEnableVertexAttribArray(SHADER_TID_INDEX);
             glEnableVertexAttribArray(SHADER_COLOR_INDEX);
             
-            glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, static_cast<const GLvoid *>(0));
-            glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, uv)));
-            glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, tid)));
-            glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDER_VERTEX_SIZE, reinterpret_cast<const void *>(offsetof(VertexData, color)));
+            glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, static_cast< GLvoid *>(0));
+            glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast< void *>(offsetof(VertexData, uv)));
+            glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, GL_FALSE, RENDER_VERTEX_SIZE, reinterpret_cast< void *>(offsetof(VertexData, tid)));
+            glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDER_VERTEX_SIZE, reinterpret_cast< void *>(offsetof(VertexData, color)));
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             GLushort indices[RENDER_INDICES_SIZE];
@@ -55,10 +59,6 @@ namespace GameEngine
 
             this->_ibo = new IndexBuffer(indices, RENDER_INDICES_SIZE);
             glBindVertexArray(0);
-            //depth set to one channel
-            // this->_FTAtlas = ftgl::texture_atlas_new(512, 512, 1);
-            this->_FTAtlas = ftgl::texture_atlas_new(512, 512, 3);
-            this->_FTFont = ftgl::texture_font_new_from_file(this->_FTAtlas, 20, "arial.ttf");
         }
 
         void Batch2dRenderer::begin()
@@ -67,16 +67,15 @@ namespace GameEngine
             this->_buffer =  reinterpret_cast<VertexData *>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
         }
 
-        void Batch2dRenderer::submit(const Renderable2d * renderable)
+        void Batch2dRenderer::submit(Renderable2d * renderable)
         {
-            const glm::vec3 positon = renderable->Position();
-            const glm::vec2 size = renderable->getSize();
-            const uint32_t color = renderable->Color();
+            glm::vec3 positon = renderable->Position();
+            glm::vec2 size = renderable->getSize();
+            uint32_t c = renderable->Color();
             const std::vector<glm::vec2>& uv = renderable->UV();
-            const GLuint tid = renderable->TextureID();
+            GLuint tid = renderable->TextureID();
 
             float ts = 0.0f;
-            uint32_t c = renderable->Color();
             if (tid > 0)
             {
                 bool found = false;
@@ -102,26 +101,25 @@ namespace GameEngine
                 }
             }
 
-
-            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon, 1.0f);
+            this->_buffer->vertex = glm::vec3(*(this->_transformationBack) * glm::vec4(positon, 1.0f));
             this->_buffer->color = c;
             this->_buffer->uv = uv[0];
             this->_buffer->tid = ts;
             this->_buffer++;
 
-            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x, positon.y + size.y, positon.z, 1.0f);
+            this->_buffer->vertex = glm::vec3(*(this->_transformationBack) * glm::vec4(positon.x, positon.y + size.y, positon.z, 1.0f));
             this->_buffer->color = c;
             this->_buffer->uv = uv[1];
             this->_buffer->tid = ts;
             this->_buffer++;
 
-            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y + size.y, positon.z, 1.0f);
+            this->_buffer->vertex = glm::vec3(*(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y + size.y, positon.z, 1.0f));
             this->_buffer->uv = uv[2];
             this->_buffer->color = c;
             this->_buffer->tid = ts;
             this->_buffer++;
 
-            this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y, positon.z, 1.0f);
+            this->_buffer->vertex = glm::vec3(*(this->_transformationBack) * glm::vec4(positon.x + size.x, positon.y, positon.z, 1.0f));
             this->_buffer->uv = uv[3];
             this->_buffer->color = c;
             this->_buffer->tid = ts;
@@ -132,7 +130,7 @@ namespace GameEngine
 
         void Batch2dRenderer::end()
         {
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            //glBindBuffer(GL_ARRAY_BUFFER, 0);
             glUnmapBuffer(GL_ARRAY_BUFFER);
         }
 
@@ -155,88 +153,56 @@ namespace GameEngine
             this->_count = 0;
         }
 
-        void Batch2dRenderer::drawString(const std::string & text, const glm::vec3 & position, const uint32_t & color)
+        void Batch2dRenderer::drawString(const std::string & text, const glm::vec3 & position, const Font &font, const uint32_t & color)
         {
-            float ts = 0.0f;
+            font._textShader->enable();
 
-            bool found = false;
-            for (size_t i = 0; i < this->_textureSlots.size(); i++)
-            {
-                if (this->_textureSlots[i] == this->_FTAtlas->id)
-                {
-                    ts = static_cast<float>(i + 1);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-            {
-                if (this->_textureSlots.size() >= 32)
-                {
-                    end();
-                    flush();
-                    begin();
-                }
-                this->_textureSlots.push_back(this->_FTAtlas->id);
-                ts = static_cast<float>(this->_textureSlots.size());
-            }
+            glm::vec3 col(1.0f);
+            col.x = (color % 256) / 255.0f;
+            col.y = ((color >> 8) % 256) / 255.0f;
+            col.z = ((color >> 16) % 256) / 255.0f;
 
-            float scaleX = 960.0f / 32.0f;
-            float scaleY = 540.0f / 18.0f;
-
+            font._textShader->setVec3("textColor", col);
+            glActiveTexture(GL_TEXTURE0);
+            glBindVertexArray(font._VAO);
             float x = position.x;
 
-            for (size_t i = 0; i < text.length(); i++)
-            {
-                char c = text[i];
-                uint32_t col = color;
-                texture_glyph_t * glyph = ftgl::texture_font_get_glyph(this->_FTFont, &c);
-                if (glyph != NULL)
-                {
-                    if (i > 0)
-                    {
-                        float kerning = ftgl::texture_glyph_get_kerning(glyph, &text[i - 1]);
-                        x += kerning / scaleX;
-                    }
-
-                    float x0 = x + glyph->offset_x / scaleX;
-                    float y0 = position.y + glyph->offset_y / scaleY;
-                    float x1 = x0 + glyph->width / scaleX;
-                    float y1 = y0 - glyph->height / scaleY;
-
-                    float u0 = glyph->s0;
-                    float v0 = glyph->t0;
-                    float u1 = glyph->s1;
-                    float v1 = glyph->t1;
-
-                    this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(x0, y0, 0, 1.0f);
-                    this->_buffer->uv = glm::vec2(u0, v0);
-                    this->_buffer->tid = ts;
-                    this->_buffer->color = col;
-                    this->_buffer++;
-
-                    this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(x0, y1, 0, 1.0f);
-                    this->_buffer->uv = glm::vec2(u0, v1);
-                    this->_buffer->tid = ts;
-                    this->_buffer->color = col;
-                    this->_buffer++;
-
-                    this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(x1, y1, 0, 1.0f);
-                    this->_buffer->uv = glm::vec2(u1, v1);
-                    this->_buffer->tid = ts;
-                    this->_buffer->color = col;
-                    this->_buffer++;
-
-                    this->_buffer->vertex = *(this->_transformationBack) * glm::vec4(x1, y0, 0, 1.0f);
-                    this->_buffer->uv = glm::vec2(u1, v0);
-                    this->_buffer->tid = ts;
-                    this->_buffer->color = col;
-                    this->_buffer++;
+            // Iterate through all characters
             
-                    this->_count += 6;
-                    x += glyph->advance_x /scaleX;
-                }
+            for (size_t i = 0; i < text.size(); i++)
+            {
+                GLchar c = text.c_str()[i];
+                const Character ch = font.Characters.at(c);
+
+                GLfloat xpos = position.x + ch.Bearing.x * font.Size();
+                GLfloat ypos = position.y + (font.Characters.at('H').Bearing.y - ch.Bearing.y) * font.Size();
+
+                GLfloat w = ch.Size.x * font.Size();
+                GLfloat h = ch.Size.y * font.Size();
+                // Update VBO for each character
+                GLfloat vertices[6][4] = {
+                    { xpos,     ypos + h,   0.0, 1.0 },
+                    { xpos + w, ypos,       1.0, 0.0 },
+                    { xpos,     ypos,       0.0, 0.0 },
+
+                    { xpos,     ypos + h,   0.0, 1.0 },
+                    { xpos + w, ypos + h,   1.0, 1.0 },
+                    { xpos + w, ypos,       1.0, 0.0 }
+                };
+                // Render glyph texture over quad
+                glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+                // Update content of VBO memory
+                glBindBuffer(GL_ARRAY_BUFFER, font._VBO);
+                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+                // Render quad
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+                // Now advance cursors for next glyph
+                x += (ch.Advance >> 6) * font.Size(); // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
             }
+            glBindVertexArray(0);
+            glBindTexture(GL_TEXTURE_2D, 0);
         }
     }
 }

@@ -8,6 +8,9 @@ namespace GameEngine
         gettimeofday(&this->_start, NULL);
     }
 
+    Timer::~Timer()
+    {}
+
     void Timer::reset()
     {
         gettimeofday(&this->_start, NULL);

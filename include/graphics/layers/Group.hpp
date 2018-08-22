@@ -2,8 +2,7 @@
 #define GROUP_HPP
 
 #include <graphics/Renderable2d.hpp>
-#include <vector>
-#include <Maths.hpp>
+#include <graphics/Renderer2d.hpp>
 
 namespace GameEngine
 {
@@ -14,7 +13,7 @@ namespace GameEngine
             public:
                 Group(const glm::mat4 & tranform);
                 ~Group();
-                virtual void submit(Renderer2d * renderer) const;
+                virtual void submit(Renderer2d * renderer) ;
 
                 void add(Renderable2d * renderable);
 

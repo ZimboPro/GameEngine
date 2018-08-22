@@ -1,6 +1,4 @@
 #include <graphics/buffers/VertexArray.hpp>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 namespace GameEngine
 {
@@ -35,12 +33,12 @@ namespace GameEngine
             this->_buffer.push_back(buffer);
         }
 
-        void VertexArray::bind() const
+        void VertexArray::bind() 
         {
             glBindVertexArray(this->_arrayID);
         }
 
-        void VertexArray::unbind() const
+        void VertexArray::unbind() 
         {
             glBindVertexArray(0); 
         }
