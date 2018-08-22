@@ -1,6 +1,7 @@
 #include <graphics/Window.hpp>
 #include <graphics/FontManager.hpp>
 #include <iostream>
+#include <cstring>
 
 namespace GameEngine
 {

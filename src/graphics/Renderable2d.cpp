@@ -27,8 +27,8 @@ namespace GameEngine
         Renderable2d::~Renderable2d()
         {}
 
-        glm::vec3 Renderable2d::Position() const
-        {
+
+        glm::vec3 Renderable2d::Position() const{
             return (this->_position);
         }
 

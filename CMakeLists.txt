@@ -4,7 +4,6 @@ project(GameEngine)
 
 set(NAME GameEngine)
 
-set(CXX_STANDARD 17)
 
 set(FETCHCONTENT_QUIET OFF)
 
